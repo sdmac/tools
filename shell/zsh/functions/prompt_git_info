@@ -1,0 +1,1 @@
+printf "%s" $__CURRENT_GIT_BRANCH_STATUS

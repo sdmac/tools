@@ -1,0 +1,73 @@
+unset __CURRENT_GIT_BRANCH
+unset __CURRENT_GIT_BRANCH_STATUS
+
+for COLOR in RED GREEN YELLOW WHITE BLACK CYAN BLUE MAGENTA; do
+    eval PR_$COLOR='%{$fg[${(L)COLOR}]%}'         
+    eval PR_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+done                                                 
+PR_RESET="%{${reset_color}%}";
+
+#GIT_PROMPT_SYMBOL="${PR_BLUE}±${PR_RESET}"
+GIT_PROMPT_PREFIX="${PR_GREEN}[${PR_RESET}"
+GIT_PROMPT_SUFFIX="${PR_GREEN}]${PR_RESET}"
+GIT_PROMPT_AHEAD="${PR_RED}ANUM${PR_RESET}"
+GIT_PROMPT_BEHIND="${PR_CYAN}BNUM${PR_RESET}"
+GIT_PROMPT_MERGING="${PR_BRIGHT_MAGENTA}⚡︎${PR_RESET}"
+GIT_PROMPT_UNTRACKED="${PR_BRIGHT_RED}°${PR_RESET}"
+GIT_PROMPT_MODIFIED="${PR_BRIGHT_YELLOW}°${PR_RESET}"
+GIT_PROMPT_STAGED="${PR_BRIGHT_GREEN}°${PR_RESET}"
+
+# Show Git branch/tag, or name-rev if on detached head.
+parse_git_branch() {
+    (git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
+}
+
+# Show different symbols as appropriate for various Git repository states.
+parse_git_state() {
+    # Compose this value via multiple conditional appends.
+    local git_state=""
+
+    local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
+    if [ "$NUM_AHEAD" -gt 0 ]; then
+        git_state+="${GIT_PROMPT_AHEAD//NUM/${NUM_AHEAD}}"
+    fi
+
+    local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
+    if [ "$NUM_BEHIND" -gt 0 ]; then
+        git_state+="${GIT_PROMPT_BEHIND//NUM/${NUM_BEHIND}}"
+    fi
+
+    local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
+    if [ -n $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
+        git_state+="$GIT_PROMPT_MERGING"
+    fi
+
+    if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+        git_state+="$GIT_PROMPT_UNTRACKED"
+    fi
+
+    if ! git diff --quiet 2> /dev/null; then
+        git_state+="$GIT_PROMPT_MODIFIED"
+    fi
+
+    if ! git diff --cached --quiet 2> /dev/null; then
+        git_state+="$GIT_PROMPT_STAGED"
+    fi
+
+    if [ -n "$git_state" ]; then
+        local git_state_prompt="$GIT_PROMPT_PREFIX"
+        git_state_prompt+="$git_state"
+        git_state_prompt+="$GIT_PROMPT_SUFFIX"
+        printf "%s" $git_state_prompt
+    fi
+}
+
+__CURRENT_GIT_BRANCH="$(parse_git_branch)"
+if [ -n "$__CURRENT_GIT_BRANCH" ]; then
+    local promptstr="$GIT_PROMPT_SYMBOL"
+    promptstr+="$(parse_git_state)"
+    promptstr+="$GIT_PROMPT_PREFIX"
+    promptstr+="${PR_YELLOW}${__CURRENT_GIT_BRANCH#(refs/heads/|tags/)}${PR_RESET}"
+    promptstr+="$GIT_PROMPT_SUFFIX"
+    __CURRENT_GIT_BRANCH_STATUS="$promptstr"
+fi

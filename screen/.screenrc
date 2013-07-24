@@ -1,0 +1,34 @@
+# Don't display the copyright page
+startup_message off
+
+# tab-completion flash in heading bar
+vbell off
+
+# prevent clobbering screen by less, vi, etc.
+altscreen on
+
+defscrollback 30000
+hardstatus on
+hardstatus alwayslastline
+hardstatus string '%{gk}[ %{G}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%2`%{g}][%{Y}%1`%{g}][%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
+caption string "%?%F%{= Bk}%? %C%A %D %d-%m-%Y %{= kB} %t%= %?%F%{= Bk}%:%{= wk}%? %n "
+
+# remove some key bindings
+bind k
+bind W
+bind ^k
+bind .
+bind ^\
+bind \\
+bind ^h
+bind h
+# make safer
+bind 'K' kill
+bind 'W' windowlist
+#bind 'V' vert_split
+
+backtick 1 60 60 $HOME/bin/get_uptime
+backtick 2 60 60 $HOME/bin/get_memutil
+
+shell zsh
+shelltitle '% |zsh'
