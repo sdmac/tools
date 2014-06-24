@@ -7,28 +7,33 @@ vbell off
 # prevent clobbering screen by less, vi, etc.
 altscreen on
 
+# allow utf-8 display
+setenv LANG en_US.UTF-8
+defutf8 on
+defbce on
+
 defscrollback 30000
+
 hardstatus on
 hardstatus alwayslastline
-hardstatus string '%{gk}[ %{G}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%2`%{g}][%{Y}%1`%{g}][%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
-caption string "%?%F%{= Bk}%? %C%A %D %d-%m-%Y %{= kB} %t%= %?%F%{= Bk}%:%{= wk}%? %n "
+hardstatus string '%{gk}[ %{G}%H %{g}][ %{B}%` %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%2`%{g}][%{Y}%1`%{g}][%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
 
 # remove some key bindings
 bind k
 bind W
 bind ^k
-bind .
-bind ^\
-bind \\
-bind ^h
-bind h
-# make safer
+# make them safer
 bind 'K' kill
 bind 'W' windowlist
-#bind 'V' vert_split
 
 backtick 1 60 60 $HOME/bin/get_uptime
 backtick 2 60 60 $HOME/bin/get_memutil
+backtick 0 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*" | cut -d. -f2'
 
 shell zsh
-shelltitle '% |zsh'
+shelltitle '$ |zsh'
+
+escape z # Instead of Control-a, make the escape/command character be Control-z
+autodetach on # Autodetach session on hangup instead of terminating screen completely
+
+term $TERM

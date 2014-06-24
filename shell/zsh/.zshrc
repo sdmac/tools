@@ -1,4 +1,4 @@
-#{{{ ZSH Modules & Functions
+#{{{ ZSH Modules
 fpath=(~/.zsh/functions $fpath)
 autoload -U colors compinit promptinit zcalc zsh-mime-setup
 autoload -U ~/.zsh/functions/*(:t) # Autoload zsh functions.
@@ -75,7 +75,7 @@ setopt PROMPT_SUBST            # Parameter expansion, command substitution and
 declare -U path
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-export LC_ALL=C
+export LC_ALL=en_US.UTF-8
 export EDITOR=vim
 export SHELL=/bin/zsh
 export SVN_SSH=/usr/bin/ssh
@@ -93,7 +93,7 @@ alias mk=popd
 alias cp='cp -i'
 alias mv='mv -i'
 alias la='ls -Al'              # Show hidden files.
-alias ls='ls -hFG --color=auto' # Add colors for filetype recognition.
+alias ls='ls -hF --color=auto' # Add colors for filetype recognition.
 alias lx='ls -lXB'             # Sort by extension.
 alias lk='ls -lSr'             # Sort by size.
 alias lc='ls -lcr'             # Sort by change time.
@@ -142,6 +142,7 @@ zstyle ':completion::approximate*:*' prefix-needed false
 #}}}
 
 #{{{ Key Bindings
+bindkey -v
 bindkey '\e[1~' beginning-of-line # Make home work.
 bindkey '\e[4~' end-of-line       # Make end work.
 bindkey -M vicmd "/" history-incremental-search-backward # Incremental search.
@@ -150,6 +151,10 @@ bindkey -M vicmd "//" history-beginning-search-backward  # Historical search.
 bindkey -M vicmd "??" history-beginning-search-forward
 bindkey "\eOP" run-help
 bindkey '\e[3~' delete-char # Rebind the delete key.
+bindkey '' beginning-of-line
+bindkey '' end-of-line
+bindkey \C-R history-incremental-search-backward
+bindkey '' history-incremental-search-backward
 #}}}
 
 #{{{ History
@@ -166,8 +171,12 @@ for COLOR in RED GREEN YELLOW WHITE BLACK CYAN BLUE; do
     eval PR_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
 done                                                 
 PR_RESET="%{${reset_color}%}";
-PROMPT='[${PR_RESET}${PR_GREEN}%t${PR_RESET} %U%m%u ${PR_BLUE}%3d${PR_RESET}]$(prompt_git_info) ${PR_RESET}$ '
+PROMPT='[${PR_RESET}${PR_GREEN}%t${PR_RESET} %U%n@%m%u ${PR_BLUE}%2d${PR_RESET}]$(prompt_git_info) ${PR_RESET}$ '
+#PROMPT='[${PR_RESET}${PR_GREEN}%t${PR_RESET} %U%m%u ${PR_BLUE}%3d${PR_RESET}]   '
+#RPROMPT='$(prompt_git_info)'
+# Single quotes above are necessary for git info to function correctly.
 #}}}
+#RPROMPT='[${PR_BLUE}%d${PR_RESET}]'
 
 #{{{ Shell Title
 function preexec () { # Special symbol that is auto-run after a command is entered.
@@ -175,9 +184,29 @@ function preexec () { # Special symbol that is auto-run after a command is enter
         echo -ne "\ek${1%% *}\e\\"
     fi
 }
-function title () { # Explicit function to have the title auto-set.
-    command echo -n "]2;$1"
+#function title () { # Explicit function to have the title auto-set.
+#    command echo -n "]2;$1"
+#}
+function title {
+    if [[ $TERM == "screen" ]]; then
+        # Use these two for GNU Screen:
+        print -nR $'\033k'$1$'\033'\\
+
+        print -nR $'\033]0;'$2$'\a'
+    elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then
+        # Use this one instead for XTerms:
+        print -nR $'\033]0;'$*$'\a'
+    fi
 }
+function precmd {
+  title zsh "$PWD"
+}
+function preexec {
+  emulate -L zsh
+  local -a cmd; cmd=(${(z)1})
+  title $cmd[1]:t "$cmd[2,-1]"
+}
+
 #}}}
 
 #{{{ Miscellaneous Functions

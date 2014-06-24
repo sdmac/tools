@@ -2,10 +2,6 @@
 " Easily switch between light and dark backgrounds
 map <F2> :let &background = ( &background == "dark"? "light" : "dark" )
 
-" enable ftplugins
-filetype plugin on
-:let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
-
 " Show next match while entering a search
 set incsearch
 " Highlight all search matches
@@ -16,6 +12,12 @@ set hlsearch
 
 " standard of 4 spaces
 set shiftwidth=4
+
+" use multiple of shiftwidth when indenting with '<' and '>'
+set shiftround 
+
+" copy the previous line indentation
+set copyindent
 
 " convert tabs to spaces
 set expandtab
@@ -43,16 +45,12 @@ set infercase
 " briefly jump to matching bracket when one inserted
 set showmatch
 
-"set path+=../api
-"set path+=../core-api
-
 " show line numbers
 set number
 
 " always show status line
 set laststatus=2
 set ruler
-":set statusline=[%c,%l]
 
 " syntax highlighting
 syntax on
@@ -91,7 +89,18 @@ autocmd FileType perl :set cindent
 " reindent pasted text
 "nnoremap p  p'[v']=
 "nnoremap P  P'[v']=
+"
+"
+augroup filetypedetect
+  au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
+augroup END
 
-" First tabcomplete longest then list, then all options
-:set wildmode=longest,list,full
-:set wildmenu
+filetype on
+autocmd FileType txt set tw=72 fo=cqt wm=0
+autocmd FileType mail set tw=72 fo=cqt wm=0
+autocmd FileType cpp set tw=80 fo=cqt wm=0
+
+" Remember 1000 commands and search history
+set history=1000
+" Use 1000 levels of undo
+set undolevels=1000
