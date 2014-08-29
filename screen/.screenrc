@@ -16,7 +16,7 @@ defscrollback 30000
 
 hardstatus on
 hardstatus alwayslastline
-hardstatus string '%{gk}[ %{G}%H %{g}][ %{B}%` %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%2`%{g}][%{Y}%1`%{g}][%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
+hardstatus string '%{gk}[ %{G}%H %{g}][ %{B}%` %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%1`%{g}][%{Y}%3`%{g}][%{Y}%2`%{g}][%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
 
 # remove some key bindings
 bind k
@@ -26,9 +26,10 @@ bind ^k
 bind 'K' kill
 bind 'W' windowlist
 
-backtick 1 60 60 $HOME/bin/get_uptime
-backtick 2 60 60 $HOME/bin/get_memutil
 backtick 0 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*" | cut -d. -f2'
+backtick 1 60 60 $HOME/bin/get_loadavg
+backtick 2 60 60 $HOME/bin/get_uptime
+backtick 3 60 60 $HOME/bin/get_memutil
 
 shell zsh
 shelltitle '$ |zsh'

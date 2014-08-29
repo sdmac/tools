@@ -28,7 +28,7 @@
     grep = auto
     interactive = auto
 [user]
-    name = seanmac
+    name = sdmac
     email = seanmac@ucla.edu
 [core]
     excludesfile = /home/seanmac/.gitignore_global
