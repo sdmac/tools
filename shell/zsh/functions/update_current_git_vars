@@ -7,15 +7,14 @@ for COLOR in RED GREEN YELLOW WHITE BLACK CYAN BLUE MAGENTA; do
 done                                                 
 PR_RESET="%{${reset_color}%}";
 
-#GIT_PROMPT_SYMBOL="${PR_BLUE}±${PR_RESET}"
 GIT_PROMPT_PREFIX="${PR_GREEN}[${PR_RESET}"
 GIT_PROMPT_SUFFIX="${PR_GREEN}]${PR_RESET}"
 GIT_PROMPT_AHEAD="${PR_RED}ANUM${PR_RESET}"
 GIT_PROMPT_BEHIND="${PR_CYAN}BNUM${PR_RESET}"
 GIT_PROMPT_MERGING="${PR_BRIGHT_MAGENTA}⚡︎${PR_RESET}"
-GIT_PROMPT_UNTRACKED="${PR_BRIGHT_RED}°${PR_RESET}"
-GIT_PROMPT_MODIFIED="${PR_BRIGHT_YELLOW}°${PR_RESET}"
-GIT_PROMPT_STAGED="${PR_BRIGHT_GREEN}°${PR_RESET}"
+GIT_PROMPT_UNTRACKED="${PR_BRIGHT_RED}●${PR_RESET}"
+GIT_PROMPT_MODIFIED="${PR_BRIGHT_YELLOW}●${PR_RESET}"
+GIT_PROMPT_STAGED="${PR_BRIGHT_GREEN}●${PR_RESET}"
 
 # Show Git branch/tag, or name-rev if on detached head.
 parse_git_branch() {
@@ -24,6 +23,7 @@ parse_git_branch() {
 
 # Show different symbols as appropriate for various Git repository states.
 parse_git_state() {
+
     # Compose this value via multiple conditional appends.
     local git_state=""
 
@@ -60,6 +60,7 @@ parse_git_state() {
         git_state_prompt+="$GIT_PROMPT_SUFFIX"
         printf "%s" $git_state_prompt
     fi
+
 }
 
 __CURRENT_GIT_BRANCH="$(parse_git_branch)"
