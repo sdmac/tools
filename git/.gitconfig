@@ -5,12 +5,16 @@
     stu = status
     ci = commit
     add = add -u
+    rb = rebase --stat
+    sh = diff --stat
+
+    ll = log --pretty=format:"%C(blue)%h\\ %C(yellow)\\ %ad%Cred%d\\ %Cgreen%s%Cblue\\ [%cn]%Creset" --decorate --numstat --date=rfc
 
     # List commits in short form, with colors and branch/tag annotations.
     ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 
     # List commits showing changed files
-    ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    #ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
 
     # List with no colors if you need to chain the out put with Unix pipes:
     lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
