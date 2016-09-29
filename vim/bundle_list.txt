@@ -1,0 +1,11 @@
+Command-T
+ctrlp.vim
+maven-compiler.vim
+nerdtree
+vim-colors-solarized
+vim-commentary
+vim-eunuch
+vim-fugitive
+vim-matchit
+vim-protobuf
+vim-ruby
