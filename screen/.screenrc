@@ -4,27 +4,38 @@ startup_message off
 # tab-completion flash in heading bar
 vbell off
 
-# prevent clobbering screen by less, vi, etc.
 altscreen on
 
-# allow utf-8 display
 setenv LANG en_US.UTF-8
 defutf8 on
+#utf8 on on
 defbce on
 
 defscrollback 30000
 
 hardstatus on
 hardstatus alwayslastline
-hardstatus string '%{gk}[ %{G}%H %{g}][ %{B}%` %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%1`%{g}][%{Y}%3`%{g}][%{Y}%2`%{g}][%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
+hardstatus string '%{gk}[ %{G}%H %{g}][ %{B}%0` %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][ %{Y}%1`%{g} ][ %{Y}%3`%{g} ][ %{G}%D %{B}%Y-%m-%d %{W}%c%a%{g} ]'
+#hardstatus string '%{gk}[ %{G}%H %{g}][ %{B}%0` %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}] [%{Y}%1`%{g}] [%{Y}%3`%{g}] [%{Y}%2`%{g}] [%{G}%D %{B}%Y-%m-%d %{W}%C%a%{g}]'
+
+#caption string "%?%F%{= Bk}%? %C%A %D %d-%m-%Y %{= kB} %t%= %?%F%{= Bk}%:%{= wk}%? %n "
+#hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
+#caption splitonly "%?%F%{= yk}%:%{= Kk}%? %n %t%="
+#caption always "%{=b dw}:%{-b dw}:%{=b dk}[ %{-b dw}%{-b dg}$USER%{-b dw}@%{-b dg}%H %{=b dk}] [ %= %?%{-b dg}%-Lw%?%{+b dk}(%{+b dw}%n:%t%{+b dk})%?(%u)%?%{-b dw}%?%{-b dg}%+Lw%? %{=b dk}]%{-b dw}:%{+b dw}:"
 
 # remove some key bindings
 bind k
 bind W
 bind ^k
+#bind .
+#bind ^\
+#bind \\
+#bind ^h
+#bind h
 # make them safer
 bind 'K' kill
 bind 'W' windowlist
+#bind 'V' vert_split
 
 backtick 0 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*" | cut -d. -f2'
 backtick 1 60 60 $HOME/bin/get_loadavg
@@ -32,9 +43,11 @@ backtick 2 60 60 $HOME/bin/get_uptime
 backtick 3 60 60 $HOME/bin/get_memutil
 
 shell zsh
+#shelltitle '% |zsh'
 shelltitle '$ |zsh'
 
-escape z # Instead of Control-a, make the escape/command character be Control-z
+#escape z # Instead of Control-a, make the escape/command character be Control-z
+escape `e
 autodetach on # Autodetach session on hangup instead of terminating screen completely
 
 term $TERM
