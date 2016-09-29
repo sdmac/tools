@@ -102,7 +102,7 @@ alias lc='ls -lcr'             # Sort by change time.
 alias lu='ls -lur'             # Sort by access time.
 alias lr='ls -lR'              # Recursive ls.
 alias lt='ls -ltr'             # Sort by date.
-alias tree='tree -AC' #-Csu'   # Directory/file tree.
+alias tree='tree -AC --dirsfirst' #-Csu'   # Directory/file tree.
 # Copy with a progress bar
 alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
 alias '..'='cd ..'
